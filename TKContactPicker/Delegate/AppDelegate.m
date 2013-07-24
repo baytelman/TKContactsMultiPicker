@@ -11,19 +11,12 @@
 
 @implementation AppDelegate
 
-- (void)dealloc
-{
-    [_window release];
-    [_mainViewController release];
-    [super dealloc];
-}
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-    self.mainViewController = [[[MainViewController alloc] initWithNibName:@"MainViewController" bundle:nil] autorelease];
-    self.navigationController = [[[UINavigationController alloc] initWithRootViewController:self.mainViewController] autorelease];
+    self.mainViewController = [[MainViewController alloc] initWithNibName:@"MainViewController" bundle:nil] ;
+    self.navigationController = [[UINavigationController alloc] initWithRootViewController:self.mainViewController] ;
     self.window.rootViewController = self.navigationController;
     [self.window makeKeyAndVisible];
     return YES;

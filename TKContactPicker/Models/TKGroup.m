@@ -9,13 +9,10 @@
 #import "TKGroup.h"
 
 @implementation TKGroup
-@synthesize name, recordID, membersCount;
 
 - (void)dealloc
 {
     if (record) CFRelease(record);
-    [name release];
-    [super dealloc];
 }
 
 @end

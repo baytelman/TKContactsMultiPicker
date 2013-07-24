@@ -15,6 +15,10 @@
 
 @class TKContact, TKContactsMultiPickerController;
 @protocol TKContactsMultiPickerControllerDelegate <NSObject>
+@optional
+- (BOOL)tkContactsMultiPickerController:(TKContactsMultiPickerController*)picker
+                   shouldIncludeContact:(TKContact*)contact
+                        alreadyIncluded:(NSArray*)contacts;
 @required
 - (void)tkContactsMultiPickerController:(TKContactsMultiPickerController*)picker didFinishPickingDataWithInfo:(NSArray*)contacts;
 - (void)tkContactsMultiPickerControllerDidCancel:(TKContactsMultiPickerController*)picker;
@@ -22,14 +26,7 @@
 
 
 @interface TKContactsMultiPickerController : UIViewController <UITableViewDataSource, UITableViewDelegate, UISearchDisplayDelegate, UISearchBarDelegate>
-{
-	id _delegate;
-    
-@private
-    TKGroup *_group;
-    NSUInteger _selectedCount;
-    NSMutableArray *_listContent;
-	NSMutableArray *_filteredListContent;
+{    
 }
 
 @property (nonatomic, retain) id<TKContactsMultiPickerControllerDelegate> delegate;

@@ -17,10 +17,6 @@
 @end
 
 @implementation TKPeoplePickerController
-@synthesize addressBook = _addressBook;
-@synthesize actionDelegate = _actionDelegate;
-@synthesize groupController = _groupController;
-@synthesize contactController = _contactController;
 
 #pragma mark -
 #pragma mark External contacts changed callback
@@ -39,7 +35,6 @@
     TKNoContactViewController *noContactController = [[TKNoContactViewController alloc] initWithNibName:NSStringFromClass([TKNoContactViewController class]) bundle:nil];
     noContactController.delegate = self;
     [self pushViewController:noContactController animated:NO];
-    [noContactController release];
 }
 
 - (void)presentContactsMultiPickerController
@@ -50,12 +45,11 @@
     contactMultiController.delegate = self;
     [self pushViewController:contactMultiController animated:NO];
     self.contactController = contactMultiController;
-    [contactMultiController release];
 }
 
 - (id)initPeoplePicker
 {
-    self.groupController = [[[TKGroupPickerController alloc] initWithNibName:NSStringFromClass([TKGroupPickerController class]) bundle:nil] autorelease];
+    self.groupController = [[TKGroupPickerController alloc] initWithNibName:NSStringFromClass([TKGroupPickerController class]) bundle:nil];
     self.groupController.delegate = self;
     self = [super initWithRootViewController:self.groupController];
     if (self) {
@@ -95,9 +89,6 @@
 - (void)dealloc
 {
     if (_addressBook) CFRelease(_addressBook);
-    [_groupController release];
-    [_contactController release];
-    [super dealloc];
 }
 
 - (void)viewDidLoad
@@ -159,6 +150,14 @@
 
 #pragma mark -
 #pragma mark TKContactsMultiPickerControllerDelegate
+- (BOOL)tkContactsMultiPickerController:(TKContactsMultiPickerController*)picker
+                   shouldIncludeContact:(TKContact*)contact
+                        alreadyIncluded:(NSArray*)contacts
+{
+    if ([self.actionDelegate respondsToSelector:@selector(tkPeoplePickerController:shouldIncludeContact:alreadyIncluded:)])
+        return [self.actionDelegate tkPeoplePickerController:self shouldIncludeContact:contact alreadyIncluded:contacts];
+    return YES;
+}
 
 - (void)tkContactsMultiPickerController:(TKContactsMultiPickerController *)picker didFinishPickingDataWithInfo:(NSArray *)contacts
 {

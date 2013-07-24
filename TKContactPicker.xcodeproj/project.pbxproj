@@ -389,6 +389,7 @@
 		74E2F38415F04E4800D21D1A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TKContactPicker/TKContactPicker-Prefix.pch";
 				INFOPLIST_FILE = "TKContactPicker/TKContactPicker-Info.plist";
@@ -400,6 +401,7 @@
 		74E2F38515F04E4800D21D1A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TKContactPicker/TKContactPicker-Prefix.pch";
 				INFOPLIST_FILE = "TKContactPicker/TKContactPicker-Info.plist";

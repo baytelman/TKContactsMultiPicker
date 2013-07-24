@@ -9,42 +9,30 @@
 #import "TKContact.h"
 
 @implementation TKContact
-@synthesize name, email, tel, thumbnail, recordID, sectionNumber, rowSelected, lastName, firstName;
 
-- (void)dealloc
-{
-    [name release];
-    [email release];
-    [tel release];
-    [thumbnail release];
-    [lastName release];
-    [firstName release];
-    
-    [super dealloc];
-}
 
 - (NSString*)sorterFirstName {
-    if (nil != firstName && ![firstName isEqualToString:@""]) {
-        return firstName;
+    if (nil != _firstName && ![_firstName isEqualToString:@""]) {
+        return _firstName;
     }
-    if (nil != lastName && ![lastName isEqualToString:@""]) {
-        return lastName;
+    if (nil != _lastName && ![_lastName isEqualToString:@""]) {
+        return _lastName;
     }
-    if (nil != name && ![name isEqualToString:@""]) {
-        return name;
+    if (nil != _name && ![_name isEqualToString:@""]) {
+        return _name;
     }
     return nil;
 }
 
 - (NSString*)sorterLastName {
-    if (nil != lastName && ![lastName isEqualToString:@""]) {
-        return lastName;
+    if (nil != _lastName && ![_lastName isEqualToString:@""]) {
+        return _lastName;
     }
-    if (nil != firstName && ![firstName isEqualToString:@""]) {
-        return firstName;
+    if (nil != _firstName && ![_firstName isEqualToString:@""]) {
+        return _firstName;
     }
-    if (nil != name && ![name isEqualToString:@""]) {
-        return name;
+    if (nil != _name && ![_name isEqualToString:@""]) {
+        return _name;
     }
     return nil;
 }

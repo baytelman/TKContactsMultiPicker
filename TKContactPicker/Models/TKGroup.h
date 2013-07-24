@@ -11,13 +11,10 @@
 
 @interface TKGroup : NSObject {
     ABRecordRef record;
-    NSInteger recordID;
-    NSString *name;
-    NSInteger membersCount;
 }
 
 @property NSInteger membersCount;
 @property NSInteger recordID;
-@property (nonatomic, retain) NSString *name;
+@property (nonatomic, copy) NSString *name;
 
 @end

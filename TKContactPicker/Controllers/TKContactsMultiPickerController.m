@@ -11,7 +11,10 @@
 #import "NSString+TKUtilities.h"
 #import "UIImage+TKUtilities.h"
 
-@interface TKContactsMultiPickerController(PrivateMethod)
+@interface TKContactsMultiPickerController()
+@property(nonatomic) NSUInteger selectedCount;
+@property(nonatomic) NSMutableArray *listContent;
+@property(nonatomic) NSMutableArray *filteredListContent;
 
 - (IBAction)doneAction:(id)sender;
 - (IBAction)dismissAction:(id)sender;
@@ -19,12 +22,6 @@
 @end
 
 @implementation TKContactsMultiPickerController
-@synthesize tableView = _tableView;
-@synthesize delegate = _delegate;
-@synthesize savedSearchTerm = _savedSearchTerm;
-@synthesize savedScopeButtonIndex = _savedScopeButtonIndex;
-@synthesize searchWasActive = _searchWasActive;
-@synthesize searchBar = _searchBar;
 
 #pragma mark -
 #pragma mark Craete addressbook ref
@@ -82,14 +79,12 @@
          [addressBook setThumbnail:personImage];
          */
         
-        NSString *fullNameString;
-        NSString *firstString = (NSString *)abName;
-        NSString *lastNameString = (NSString *)abLastName;
+        NSString *fullNameString = (__bridge NSString *)abFullName;
+        NSString *firstString = (__bridge NSString *)abName;
+        NSString *lastNameString = (__bridge NSString *)abLastName;
         
-        if ((id)abFullName != nil) {
-            fullNameString = (NSString *)abFullName;
-        } else {
-            if ((id)abLastName != nil)
+        if (!fullNameString) {
+            if (lastNameString)
             {
                 fullNameString = [NSString stringWithFormat:@"%@ %@", firstString, lastNameString];
             }
@@ -98,8 +93,8 @@
         contact.name = fullNameString;
         contact.recordID = (int)ABRecordGetRecordID(contactRecord);
         contact.rowSelected = NO;
-        contact.lastName = (NSString*)abLastName;
-        contact.firstName = (NSString*)abName;
+        contact.lastName = (__bridge NSString*)abLastName;
+        contact.firstName = (__bridge NSString*)abName;
         
         ABPropertyID multiProperties[] = {
             kABPersonPhoneProperty,
@@ -121,11 +116,11 @@
                 CFStringRef value = ABMultiValueCopyValueAtIndex(valuesRef, k);
                 switch (j) {
                     case 0: {// Phone number
-                        contact.tel = [(NSString*)value telephoneWithReformat];
+                        contact.tel = [(__bridge NSString*)value telephoneWithReformat];
                         break;
                     }
                     case 1: {// Email
-                        contact.email = (NSString*)value;
+                        contact.email = (__bridge NSString*)value;
                         break;
                     }
                 }
@@ -134,8 +129,9 @@
             CFRelease(valuesRef);
         }
         
-        [contactsTemp addObject:contact];
-        [contact release];
+        if (![self.delegate respondsToSelector:@selector(tkContactsMultiPickerController:shouldIncludeContact:alreadyIncluded:)] ||
+            [self.delegate tkContactsMultiPickerController:self shouldIncludeContact:contact alreadyIncluded:contactsTemp])
+            [contactsTemp addObject:contact];
         
         if (abName) CFRelease(abName);
         if (abLastName) CFRelease(abLastName);
@@ -197,7 +193,7 @@
     
     [self.navigationItem setLeftBarButtonItem:nil];
     [self.navigationItem setTitle:NSLocalizedString(@"Contacts", nil)];
-    [self.navigationItem setRightBarButtonItem:[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(dismissAction:)] autorelease]];
+    [self.navigationItem setRightBarButtonItem:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(dismissAction:)] ];
     
     if (self.savedSearchTerm)
 	{
@@ -285,7 +281,7 @@
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCustomCellID];
 	if (cell == nil)
 	{
-		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCustomCellID] autorelease];
+		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCustomCellID];
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	}
@@ -343,9 +339,9 @@
     if (checked) _selectedCount++;
     else _selectedCount--;
     if (_selectedCount > 0)
-        [self.navigationItem setRightBarButtonItem:[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneAction:)] autorelease]];
+        [self.navigationItem setRightBarButtonItem:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneAction:)]];
     else
-        [self.navigationItem setRightBarButtonItem:[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(dismissAction:)] autorelease]];
+        [self.navigationItem setRightBarButtonItem:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(dismissAction:)]];
     
     UITableViewCell *cell =[self.tableView cellForRowAtIndexPath:indexPath];
     UIButton *button = (UIButton *)cell.accessoryView;
@@ -386,8 +382,6 @@
     
     if ([self.delegate respondsToSelector:@selector(tkContactsMultiPickerController:didFinishPickingDataWithInfo:)])
         [self.delegate tkContactsMultiPickerController:self didFinishPickingDataWithInfo:objects];
-    
-	[objects release];
 }
 
 - (IBAction)dismissAction:(id)sender
@@ -454,18 +448,4 @@
     
     return YES;
 }
-
-#pragma mark -
-#pragma mark Memory management
-
-- (void)dealloc
-{
-    [_group release];
-	[_filteredListContent release];
-    [_listContent release];
-    [_tableView release];
-    [_searchBar release];
-	[super dealloc];
-}
-
 @end

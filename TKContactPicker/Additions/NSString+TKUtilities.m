@@ -19,27 +19,28 @@
 
 - (NSString*)telephoneWithReformat
 {
-    if ([self containsString:@"-"])
+    NSString * result = self;
+    if ([result containsString:@"-"])
     {
-        self = [self stringByReplacingOccurrencesOfString:@"-" withString:@""];
+        result = [result stringByReplacingOccurrencesOfString:@"-" withString:@""];
     }
     
-    if ([self containsString:@" "])
+    if ([result containsString:@" "])
     {
-        self = [self stringByReplacingOccurrencesOfString:@" " withString:@""];
+        result = [result stringByReplacingOccurrencesOfString:@" " withString:@""];
     }
     
-    if ([self containsString:@"("])
+    if ([result containsString:@"("])
     {
-        self = [self stringByReplacingOccurrencesOfString:@"(" withString:@""];
+        result = [result stringByReplacingOccurrencesOfString:@"(" withString:@""];
     }
     
-    if ([self containsString:@")"])
+    if ([result containsString:@")"])
     {
-        self = [self stringByReplacingOccurrencesOfString:@")" withString:@""];
+        result = [result stringByReplacingOccurrencesOfString:@")" withString:@""];
     }
     
-    return self;
+    return result;
 }
 
 @end

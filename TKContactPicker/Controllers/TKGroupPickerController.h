@@ -13,7 +13,6 @@
 @end
 
 @interface TKGroupPickerController : UIViewController <UIAlertViewDelegate, UIActionSheetDelegate> {
-    id _delegate;
 }
 
 @property (nonatomic, assign) id<TKGroupPickerControllerDelegate> delegate;

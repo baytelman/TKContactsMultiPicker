@@ -12,6 +12,10 @@
 
 @class TKPeoplePickerController;
 @protocol TKPeoplePickerControllerDelegate <NSObject>
+@optional
+- (BOOL)tkPeoplePickerController:(TKPeoplePickerController*)picker
+            shouldIncludeContact:(TKContact*)contact
+                 alreadyIncluded:(NSArray*)contacts;
 @required
 - (void)tkPeoplePickerController:(TKPeoplePickerController*)picker didFinishPickingDataWithInfo:(NSArray*)contacts;
 - (void)tkPeoplePickerControllerDidCancel:(TKPeoplePickerController*)picker;
