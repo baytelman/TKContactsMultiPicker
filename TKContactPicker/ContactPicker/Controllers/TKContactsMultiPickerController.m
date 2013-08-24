@@ -281,7 +281,7 @@
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCustomCellID];
 	if (cell == nil)
 	{
-		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCustomCellID];
+		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:kCustomCellID];
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	}
@@ -294,9 +294,14 @@
     
     if ([[contact.name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length] > 0) {
         cell.textLabel.text = contact.name;
+        cell.detailTextLabel.text = contact.email;
     } else {
         cell.textLabel.font = [UIFont italicSystemFontOfSize:cell.textLabel.font.pointSize];
-        cell.textLabel.text = @"No Name";
+        
+        if (contact.email)
+            cell.textLabel.text = contact.email;
+        else
+            cell.textLabel.text = @"No Name";
     }
 	
 	UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -334,6 +339,11 @@
     
     BOOL checked = !contact.rowSelected;
     contact.rowSelected = checked;
+    
+    if ([self.delegate respondsToSelector:@selector(tkContactsMultiPickerController:
+                                                    didSelectContact:)]) {
+        [self.delegate tkContactsMultiPickerController:self didSelectContact:contact];
+    }
     
     // Enabled rightButtonItem
     if (checked) _selectedCount++;

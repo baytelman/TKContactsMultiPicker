@@ -20,6 +20,8 @@
                    shouldIncludeContact:(TKContact*)contact
                         alreadyIncluded:(NSArray*)contacts;
 @required
+- (void)tkContactsMultiPickerController:(TKContactsMultiPickerController*)picker
+                       didSelectContact:(TKContact*)contact;
 - (void)tkContactsMultiPickerController:(TKContactsMultiPickerController*)picker didFinishPickingDataWithInfo:(NSArray*)contacts;
 - (void)tkContactsMultiPickerControllerDidCancel:(TKContactsMultiPickerController*)picker;
 @end

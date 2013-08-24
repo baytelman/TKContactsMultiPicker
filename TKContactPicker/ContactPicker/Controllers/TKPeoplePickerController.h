@@ -16,6 +16,8 @@
 - (BOOL)tkPeoplePickerController:(TKPeoplePickerController*)picker
             shouldIncludeContact:(TKContact*)contact
                  alreadyIncluded:(NSArray*)contacts;
+- (void)tkPeoplePickerController:(TKPeoplePickerController*)picker
+                didSelectContact:(TKContact*)contact;
 @required
 - (void)tkPeoplePickerController:(TKPeoplePickerController*)picker didFinishPickingDataWithInfo:(NSArray*)contacts;
 - (void)tkPeoplePickerControllerDidCancel:(TKPeoplePickerController*)picker;

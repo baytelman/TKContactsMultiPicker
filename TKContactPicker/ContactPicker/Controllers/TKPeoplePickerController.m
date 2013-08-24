@@ -159,6 +159,13 @@
     return YES;
 }
 
+- (void)tkContactsMultiPickerController:(TKContactsMultiPickerController*)picker
+                       didSelectContact:(TKContact*)contact
+{
+    if ([self.actionDelegate respondsToSelector:@selector(tkPeoplePickerController:didSelectContact:)])
+        [self.actionDelegate tkPeoplePickerController:self didSelectContact:contact];
+}
+
 - (void)tkContactsMultiPickerController:(TKContactsMultiPickerController *)picker didFinishPickingDataWithInfo:(NSArray *)contacts
 {
     [self saveAction:contacts];

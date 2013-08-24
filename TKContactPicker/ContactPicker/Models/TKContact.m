@@ -21,7 +21,7 @@
     if (nil != _name && ![_name isEqualToString:@""]) {
         return _name;
     }
-    return nil;
+    return @"zz";
 }
 
 - (NSString*)sorterLastName {
@@ -34,7 +34,7 @@
     if (nil != _name && ![_name isEqualToString:@""]) {
         return _name;
     }
-    return nil;
+    return @"zz";
 }
 
 @end
